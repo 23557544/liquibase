@@ -39,7 +39,7 @@ public class OracleDatabase extends AbstractJdbcDatabase {
     private Set<String> reservedWords = new HashSet<String>();
     private Set<String> userDefinedTypes = null;
 
-    private Boolean canAccessDbaRecycleBin;
+    protected Boolean canAccessDbaRecycleBin;
     private Integer databaseMajorVersion;
 
     public OracleDatabase() {

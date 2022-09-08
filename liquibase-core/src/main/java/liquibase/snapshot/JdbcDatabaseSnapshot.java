@@ -225,15 +225,16 @@ public class JdbcDatabaseSnapshot extends DatabaseSnapshot {
                                         "c.TABLE_NAME, " +
                                         "c.COLUMN_NAME, " +
                                         "c.COLUMN_POSITION AS ORDINAL_POSITION, " +
-                                        "e.COLUMN_EXPRESSION AS FILTER_CONDITION, " +
+//                                        "e.COLUMN_EXPRESSION AS FILTER_CONDITION, " +
+                                        "NULL AS FILTER_CONDITION, " +
                                         "CASE I.UNIQUENESS WHEN 'UNIQUE' THEN 0 ELSE 1 END AS NON_UNIQUE, " +
                                         "CASE c.DESCEND WHEN 'Y' THEN 'D' WHEN 'N' THEN 'A' END AS ASC_OR_DESC " +
                                         "FROM ALL_IND_COLUMNS c " +
                                         "JOIN ALL_INDEXES i ON (i.index_name = c.index_name and i.table_owner = c.table_owner)" +
-                                        "LEFT JOIN " + (((OracleDatabase) database).canAccessDbaRecycleBin() ? "dba_recyclebin" : "user_recyclebin") + " d ON d.object_name=c.table_name " +
-                                        "LEFT JOIN all_ind_expressions e ON e.column_position = c.column_position AND e.index_name = c.index_name " +
+//                                        "LEFT JOIN " + (((OracleDatabase) database).canAccessDbaRecycleBin() ? "dba_recyclebin" : "user_recyclebin") + " d ON d.object_name=c.table_name " +
+//                                        "LEFT JOIN all_ind_expressions e ON e.column_position = c.column_position AND e.index_name = c.index_name " +
                                         "WHERE c.TABLE_OWNER = '" + database.correctObjectName(catalogAndSchema.getCatalogName(), Schema.class) + "' " +
-                                        "AND d.object_name IS NULL " +
+//                                        "AND d.object_name IS NULL " +
                                         "AND i.OWNER = c.TABLE_OWNER";
 
                         if (!bulkFetch && tableName != null) {
@@ -664,9 +665,9 @@ public class JdbcDatabaseSnapshot extends DatabaseSnapshot {
 
                             String sql = "SELECT NULL AS table_cat, c.owner AS table_schem, c.table_name, c.column_name, c.position AS key_seq, c.constraint_name AS pk_name " +
                                     "FROM all_cons_columns c, all_constraints k " +
-                                    "LEFT JOIN " + (((OracleDatabase) database).canAccessDbaRecycleBin() ? "dba_recyclebin" : "user_recyclebin") + " d ON d.object_name=k.table_name " +
+//                                    "LEFT JOIN " + (((OracleDatabase) database).canAccessDbaRecycleBin() ? "dba_recyclebin" : "user_recyclebin") + " d ON d.object_name=k.table_name " +
                                     "WHERE k.constraint_type = 'P' " +
-                                    "AND d.object_name IS NULL " +
+//                                    "AND d.object_name IS NULL " +
                                     "AND k.table_name = '" + table + "' " +
                                     "AND k.owner = '" + ((AbstractJdbcDatabase) database).getJdbcSchemaName(catalogAndSchema) + "' " +
                                     "AND k.constraint_name = c.constraint_name " +
@@ -695,9 +696,9 @@ public class JdbcDatabaseSnapshot extends DatabaseSnapshot {
                             return executeAndExtract("SELECT NULL AS table_cat, c.owner AS table_schem, c.table_name, c.column_name, c.position AS key_seq,c.constraint_name AS pk_name FROM " +
                                     "all_cons_columns c, " +
                                     "all_constraints k " +
-                                    "LEFT JOIN " + (((OracleDatabase) database).canAccessDbaRecycleBin() ? "dba_recyclebin" : "user_recyclebin") + " d ON d.object_name=k.table_name " +
+//                                    "LEFT JOIN " + (((OracleDatabase) database).canAccessDbaRecycleBin() ? "dba_recyclebin" : "user_recyclebin") + " d ON d.object_name=k.table_name " +
                                     "WHERE k.constraint_type = 'P' " +
-                                    "AND d.object_name IS NULL " +
+//                                    "AND d.object_name IS NULL " +
                                     "AND k.owner='" + catalogAndSchema.getCatalogName() + "' " +
                                     "AND k.constraint_name = c.constraint_name " +
                                     "AND k.table_name = c.table_name " +
@@ -793,10 +794,10 @@ public class JdbcDatabaseSnapshot extends DatabaseSnapshot {
                         sql = "select uc.constraint_name, uc.table_name,uc.status,uc.deferrable,uc.deferred,ui.tablespace_name, ui.index_name, ui.owner as INDEX_CATALOG " +
                                 "from all_constraints uc " +
                                 "join all_indexes ui on uc.index_name = ui.index_name and uc.owner=ui.table_owner " +
-                                "LEFT JOIN " + (((OracleDatabase) database).canAccessDbaRecycleBin() ? "dba_recyclebin" : "user_recyclebin") + " d ON d.object_name=ui.table_name " +
+//                                "LEFT JOIN " + (((OracleDatabase) database).canAccessDbaRecycleBin() ? "dba_recyclebin" : "user_recyclebin") + " d ON d.object_name=ui.table_name " +
                                 "where uc.constraint_type='U' " +
-                                "and uc.owner = '" + jdbcSchemaName + "'" +
-                                "AND d.object_name IS NULL ";
+                                "and uc.owner = '" + jdbcSchemaName + "'";
+//                                "AND d.object_name IS NULL ";
 
                         if (tableName != null) {
                             sql += " and uc.table_name = '" + tableName + "'";
