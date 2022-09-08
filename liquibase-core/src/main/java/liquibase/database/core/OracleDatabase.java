@@ -40,7 +40,7 @@ public class OracleDatabase extends AbstractJdbcDatabase {
     private Set<String> userDefinedTypes = null;
 
     protected Boolean canAccessDbaRecycleBin;
-    protected Integer databaseMajorVersion;
+    private Integer databaseMajorVersion;
 
     public OracleDatabase() {
         super.unquotedObjectsAreUppercased=true;
